@@ -12,7 +12,6 @@ class ProductManager {
     // debe devolver el arreglo con todos los productos creados hasta ese momento✅
 
         if(fs.existsSync(this.path)){
-            console.log('HOLA EL ARCHIVO EXISTE!!!!!');
             return JSON.parse(fs.readFileSync(this.path, "utf8"));
         } else {
             return [];
@@ -27,8 +26,6 @@ class ProductManager {
         // Al agregarlo, debe crearse con un id autoincrementable ✅
         // Agrega el producto actualizando la informacion en memoria y en archivo para asegurar la persistencia de los datos (Desafio2) ✅
         let products = this.getProducts();
-        
-        console.log("Lo que hay en this.products al entrar al addproducts",products);
 
         if(products.some(product => product.code === code)){
             console.log("\n ⛔ ¡No se pudo agregar el producto! El código ingresado ya existe \n");
@@ -57,7 +54,6 @@ class ProductManager {
             }
 
             products.push(product);
-            console.log("Lo que hay en products antes de  Escribir", products);
 
             try {
                 fs.writeFileSync(this.path, JSON.stringify(products, null, 2));
@@ -75,7 +71,7 @@ class ProductManager {
     // En caso de no coincidir ningún id, mostrar en consola un error “Not found”✅
     // La busqueda la realiza desde los datos del archivo de persistencia (Desafio2) ✅ 
         let dataFromFile = this.getProducts()
-        console.log(dataFromFile);
+        
         const found = dataFromFile.find((product) => product.id === id);
 
         if( found ){
@@ -84,13 +80,47 @@ class ProductManager {
         return "\n ❌ Not found \n"
         }
     }
+
+    deletProduct(id){
+        let products=this.getProducts()
+        let index=products.findIndex(product=>product.id===id)
+        if(index===-1){
+            console.log(`El producto con id ${id} no existe en la base de datos`)
+            return 
+        }
+
+        products.splice(index, 1)
+        fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
+
+    }
+
+    updateProduct(id, obj){
+        let products=this.getProducts()
+        let index=products.findIndex(product=>product.id===id)
+        if(index===-1){
+            console.log(`El producto con id ${id} no existe en la base de datos`)
+            return 
+        }
+
+        products[index]={
+            ...productos[index],
+            ...obj,
+            id
+        }
+
+        fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
+
+    }
+
+
+
 }
 
 
 
 //Validaciones
 let productManager = new ProductManager("./productsFile.json")                //Instancia de la clase ProductManager
-//console.log(productManager.getProducts());               //Arreglo producto vacio
+console.log(productManager.getProducts());               //Arreglo producto vacio
 productManager.addProduct("botas","Botas negras de cuero",29.30,"urldelaimagen","pp3499",56);      //Agrega un Producto Valido ID 1
 productManager.addProduct("camisa","camisa de lana clase A",29.30,"urldelaimagen1","39995asd",56);   // Agrega un Producto Valido ID 2
 productManager.addProduct("camisa","camisa de lana clase B",10.75,"urldelaimagen2","2435asd",56);   // Agrega un Producto Valido ID 3
