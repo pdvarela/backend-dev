@@ -129,4 +129,5 @@ productManager.addProduct("casco","casco de ciclismo Mips",33.50,"urldelaimagen4
 console.log(productManager.getProducts());      //Muestra todos los productos agregados correctamente
 console.log(productManager.getProductById(2));  //Solicita un producto existente devuelve el producto solicitado
 console.log(productManager.getProductById(4));  //Solicita un producto inexistente devuelve Not Found ❌
+productManager.deletProduct(2);                    //Elimina un producto existente
 
