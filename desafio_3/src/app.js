@@ -22,21 +22,38 @@ const PORT = 8080
 
 const app = express()
 
-app.get('/products/:id', (req, res) => {
-    let id = parseInt(req.params.id)
-    result = productManager.getProductById(id)
+//Query limit
+app.get('/products', (req, res) => {
+    let result = productManager.getProducts()
+    if(req.query.limit){
+        result = result.slice(0,req.query.limit)
+    }
     res.setHeader("Content-type","application/json")
     res.json({result})
+})
+
+//By ID con params
+app.get('/products/:pid', (req, res) => {
+    let id = parseInt(req.params.pid)
+    if(isNaN(id)){
+        res.send({error:'Ingresa un ID numérico'})
+    } else{
+        result = productManager.getProductById(id)
+        res.setHeader("Content-type","application/json")
+        res.json({result})
+    }
     
 })
 
+//Mostrar Products
 app.get('/products', (req, res) => {
     res.setHeader("Content-type","application/json")
     res.json(productManager.getProducts())
 })
 
+//root
 app.get('/', (req, res) => {
-    res.send('Hello World! Im an Express Server')
+    res.send('Hello World! Im an Express Server - Root For ProductManager')
 })
 
 const server = app.listen(PORT, () => {
