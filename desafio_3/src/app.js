@@ -4,6 +4,7 @@ const fs = require('fs')
 const productManager = new ProductManager("./productsFile.json")
 const jsonFile = "./productsFile.json";
 
+//La siguiente validacion permite agregar los productos y generar el archivo de productos para las respectivas pruebas sin dejar un archivo ya creado en el sistema de archivos
 if (!fs.existsSync(jsonFile)) {
     productManager.addProduct("botas","Botas negras de cuero",29.30,"urldelaimagen","pp3499",56);      //Agrega un Producto Valido ID 1
     productManager.addProduct("camisa","camisa de lana clase A",29.30,"urldelaimagen1","39995asd",56);   // Agrega un Producto Valido ID 2
@@ -14,13 +15,20 @@ if (!fs.existsSync(jsonFile)) {
     productManager.addProduct("Mochila MTB","Mochila de hidratacion para MTB",30,"urldelaimagen6","3435kst",40);
     productManager.addProduct("Bicicleta Scott Scale 920","Scott Scale 920 Talla M",2500,"urldelaimagen7","5435asu",12);
     productManager.addProduct("Gel Energetico","Gel Energetico con Cafeina",3.50,"urldelaimagen8","3475ahd",300);
-    productManager.addProduct("Saaaaales efervecentes","Sales hidratantes en pastilla",3.80,"urldelaimagen9","7439afd",100);
+    productManager.addProduct("Sales efervescentes","Sales hidratantes en pastilla",3.80,"urldelaimagen9","7439afd",100);
 }
 
 const PORT = 8080
 
 const app = express()
 
+app.get('/products/:id', (req, res) => {
+    let id = parseInt(req.params.id)
+    result = productManager.getProductById(id)
+    res.setHeader("Content-type","application/json")
+    res.json({result})
+    
+})
 
 app.get('/products', (req, res) => {
     res.setHeader("Content-type","application/json")

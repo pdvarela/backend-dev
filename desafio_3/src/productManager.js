@@ -76,7 +76,7 @@ class ProductManager {
         if( found ){
             return found
         }else{
-        return "\n ❌ Not found \n"
+        return " ❌ Product not found "
         }
     }
 

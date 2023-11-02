@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "title": "botas",
+    "description": "Botas negras de cuero",
+    "price": 29.3,
+    "thumbnail": "urldelaimagen",
+    "code": "pp3499",
+    "stock": 56
+  },
+  {
+    "id": 2,
+    "title": "camisa",
+    "description": "camisa de lana clase A",
+    "price": 29.3,
+    "thumbnail": "urldelaimagen1",
+    "code": "39995asd",
+    "stock": 56
+  },
+  {
+    "id": 3,
+    "title": "camisa",
+    "description": "camisa de lana clase B",
+    "price": 10.75,
+    "thumbnail": "urldelaimagen2",
+    "code": "2435asd",
+    "stock": 56
+  },
+  {
+    "id": 4,
+    "title": "sueter",
+    "description": "Sueter de lana clase B",
+    "price": 25,
+    "thumbnail": "urldelaimagen3",
+    "code": "rrr35as",
+    "stock": 5
+  },
+  {
+    "id": 5,
+    "title": "casco",
+    "description": "casco de ciclismo Mips",
+    "price": 33.5,
+    "thumbnail": "urldelaimagen4",
+    "code": "2445asd",
+    "stock": 80
+  },
+  {
+    "id": 6,
+    "title": "zapato ciclismo",
+    "description": "Zapato de ciclismo ZEBRA",
+    "price": 90.5,
+    "thumbnail": "urldelaimagen5",
+    "code": "2935asd",
+    "stock": 80
+  },
+  {
+    "id": 7,
+    "title": "Mochila MTB",
+    "description": "Mochila de hidratacion para MTB",
+    "price": 30,
+    "thumbnail": "urldelaimagen6",
+    "code": "3435kst",
+    "stock": 40
+  },
+  {
+    "id": 8,
+    "title": "Bicicleta Scott Scale 920",
+    "description": "Scott Scale 920 Talla M",
+    "price": 2500,
+    "thumbnail": "urldelaimagen7",
+    "code": "5435asu",
+    "stock": 12
+  },
+  {
+    "id": 9,
+    "title": "Gel Energetico",
+    "description": "Gel Energetico con Cafeina",
+    "price": 3.5,
+    "thumbnail": "urldelaimagen8",
+    "code": "3475ahd",
+    "stock": 300
+  },
+  {
+    "id": 10,
+    "title": "Saaaaales efervecentes",
+    "description": "Sales hidratantes en pastilla",
+    "price": 3.8,
+    "thumbnail": "urldelaimagen9",
+    "code": "7439afd",
+    "stock": 100
+  }
+]
