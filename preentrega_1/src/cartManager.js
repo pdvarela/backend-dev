@@ -37,12 +37,7 @@ class CartManager {
 
     carts.push(cart);
 
-    try {
       fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
-    } catch (error) {
-      console.log("Error al tratar de escribir el archivo cartsFile.json", error);
-    }
-
     return;
   }
 
@@ -76,15 +71,11 @@ class CartManager {
       } else {
         products.push({ id: pid, quantity: 1 });
       }
-
-      try {
         fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
-      } catch (error) {
-        throw new Error("Error al tratar de escribir el archivo cartsFile.json", error);
-      }
       return;
     } else {
-        throw new Error(`Error, no existe el carrito con el ID: ${cid} para agregar el producto con ID: ${pid}`);
+        
+        return `Error, no existe el carrito con el ID: ${cid} para agregar el producto con ID: ${pid}`;
     }
   }
 

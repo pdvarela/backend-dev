@@ -4,6 +4,7 @@ const productsRouter = express.Router;
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
 productsRouter.get('/', (req, res) => {
+    console.log('Entro a get products');
     let result = productManager.getProducts()
     if(req.query.limit){
         result = result.slice(0,req.query.limit)
