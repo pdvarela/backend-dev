@@ -80,12 +80,11 @@ class CartManager {
       try {
         fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
       } catch (error) {
-        console.log("Error al tratar de escribir el archivo cartsFile.json", error);
+        throw new Error("Error al tratar de escribir el archivo cartsFile.json", error);
       }
       return;
     } else {
-        
-        return `Error, no existe el carrito con el ID: ${cid} para agregar el producto con ID: ${pid}`;
+        throw new Error(`Error, no existe el carrito con el ID: ${cid} para agregar el producto con ID: ${pid}`);
     }
   }
 

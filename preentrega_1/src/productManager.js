@@ -1,3 +1,4 @@
+const { error } = require('console');
 const fs = require('fs');
 
 class ProductManager {
@@ -19,7 +20,7 @@ class ProductManager {
 
     }
 
-    addProduct(title,description,price,thumbnail,code,stock) {
+    addProduct(title,description,price,thumbnails,code,stock,status,category) {
         // Agregará un producto al arreglo de productos inicial ✅
         // Validar que no se repita el campo “code” y que todos los campos sean obligatorios✅
         // Al agregarlo, debe crearse con un id autoincrementable ✅
@@ -30,10 +31,10 @@ class ProductManager {
             console.log("\n ⛔ ¡No se pudo agregar el producto! El código ingresado ya existe \n");
             return;
             
-        } else if(!title || !description || !price || !thumbnail || !code || !stock) {
+        } else if(!title || !description || !price || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) || !code || !stock || status === undefined || !category) {
             
-            console.log("\n ⚠️  Todos los campos son obligatorios ¡Intenta agregar nuevamente el producto! \n");
-            return;
+            console.log("\n ⚠️  Todos los campos son obligatorios ¡Intenta agregar nuevamente el producto, asegurate de incluir por lo menos 1 Thumbnail y setear el Status en true o False! \n");
+            throw new Error('Faltan parámetros en la solicitud o son incorrectos.');
             
         } else {
             let id = 1;
@@ -47,9 +48,11 @@ class ProductManager {
                 title,
                 description,
                 price,
-                thumbnail,
+                thumbnails,
                 code,
-                stock
+                stock,
+                status,
+                category,
             }
 
             products.push(product);
@@ -84,21 +87,22 @@ class ProductManager {
         let products=this.getProducts()
         let index=products.findIndex(product=>product.id===id)
         if(index===-1){
-            console.log(`El producto con id ${id} no existe en la base de datos`)
-            return 
+            throw new Error(`El producto con id ${id} no existe en la base de datos`)
         }
 
         products.splice(index, 1)
         fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
-
     }
 
     updateProduct(id, obj){
         let products=this.getProducts()
         let index=products.findIndex(product=>product.id===id)
         if(index===-1){
-            console.log(`El producto con id ${id} no existe en la base de datos`)
-            return 
+            throw new Error(`El producto con id ${id} no existe en la base de datos`)
+        } else if(!title || !description || !price || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) || !code || !stock || status === undefined || !category) {
+            
+            console.log("\n ⚠️ ¡Intenta actualizar nuevamente el producto, asegurate de incluir todas las propiedades, por lo menos 1 Thumbnail y setear el Status en true o False! \n");
+            throw new Error('Faltan parámetros en la solicitud o son incorrectos verifique las propiedades del producto.');
         }
 
         products[index]={
