@@ -9,13 +9,12 @@ const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
 productsRouter.get('/', (req, res) => {
-    console.log('Entro a get products');
-    let result = productManager.getProducts()
+    let products = productManager.getProducts()
     if(req.query.limit){
         result = result.slice(0,req.query.limit)
     }
     res.setHeader("Content-type","application/json")
-    res.json({result})
+    res.json({products})
 })
 
 //By ID con params ✅
@@ -24,9 +23,9 @@ productsRouter.get('/:pid', (req, res) => {
     if(isNaN(id)){
         res.send({error:'Ingresa un ID numérico'})
     } else{
-        result = productManager.getProductById(id)
+        let product = productManager.getProductById(id)
         res.setHeader("Content-type","application/json")
-        res.json({result})
+        res.json({product})
     }
     
 })
@@ -54,7 +53,6 @@ productsRouter.post('/', (req, res) => {
 })
 
 //La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar o eliminar el id al momento de hacer dicha actualización. ✅
-
  productsRouter.put('/:pid', (req, res) => {
     let id = parseInt(req.params.pid)
     if(isNaN(id)){
@@ -75,8 +73,7 @@ productsRouter.post('/', (req, res) => {
     }
  })
 
- //La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. ✅
-    
+ //La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. ✅ 
  productsRouter.delete('/:pid', (req, res) => {
     let id = parseInt(req.params.pid)
     if(isNaN(id)){

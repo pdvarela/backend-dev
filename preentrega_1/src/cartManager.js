@@ -1,4 +1,6 @@
 const fs = require('fs');
+const path = require('path');
+const productsPath = path.join(__dirname, '.','DB','productsFile.json')
 
 
 class CartManager {
@@ -13,6 +15,7 @@ class CartManager {
     if (fs.existsSync(this.path)) {
       return JSON.parse(fs.readFileSync(this.path, "utf8"));
     } else {
+      
       return [];
     }
   }
@@ -47,6 +50,14 @@ class CartManager {
 
   getProductsInCartByCartId(cid) {
     // Debe devolver el arreglo con todos los productos del cart que coincida con el id ✅
+    let cartsLenght = this.getCarts().length;
+    if (!fs.existsSync(this.path)) {
+      throw new Error("No existen carritos en la base de datos. Primero crea un carrito para poder consultarlos");
+    }
+    if (cid < 0 || cid > cartsLenght) {
+      throw new Error(`Cart Not found`);
+      
+    }
     let carts = this.getCarts();
 
     let cart = carts.find((cart) => cart.id === cid);
@@ -65,15 +76,34 @@ class CartManager {
     // Agrega el producto actualizando la informacion en memoria y en archivo para asegurar la persistencia de los datos en el archivo de carts ✅
     
     let carts = this.getCarts();
+    if(!fs.existsSync(this.path)){
+      throw new Error("No existen carritos en la base de datos. Primero crea un carrito para poder agregar productos usando su ID");
+    }
     let cart = carts.find((cart) => cart.id === cid);
     let products = cart.products;
-
     if (cart) {
-      let product = products.find((product) => product.id === pid);
-      if (product) {
-        product.quantity++;
+      
+      let productToAdd = {};
+      
+      if (fs.existsSync(productsPath)) {
+        let productsInFile = JSON.parse(fs.readFileSync(productsPath, "utf8"));
+        let foundProduct = productsInFile.find((product) => product.id === pid);
+        if (foundProduct) {
+          productToAdd = {...foundProduct};
+        } else{
+          throw new Error("No existe el producto que se desea agregar al carrito");
+        }
+        
       } else {
-        products.push({ id: pid, quantity: 1 });
+        throw new Error("El producto que se desea agregar al carrito no existe en la base de datos (DB), primero registralo en la DB");
+      }
+
+      let productInCart = products.find((product) => product.product === pid);
+
+      if (productInCart) {
+        productInCart.quantity++;
+      } else {
+        products.push({ product: pid, quantity: 1 });
       }
         fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
       return;

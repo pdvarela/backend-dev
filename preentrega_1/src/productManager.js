@@ -19,21 +19,16 @@ class ProductManager {
 
     }
 
-    addProduct(title,description,price,thumbnails,code,stock,status,category) {
-        // Agregará un producto al arreglo de productos inicial ✅
-        // Validar que no se repita el campo “code” y que todos los campos sean obligatorios✅
-        // Al agregarlo, debe crearse con un id autoincrementable ✅
-        // Agrega el producto actualizando la informacion en memoria y en archivo para asegurar la persistencia de los datos (Desafio2) ✅
+    addProduct(productObjet) {
+        const { title,description,price,thumbnails,code,stock,status,category } = productObjet;
         let products = this.getProducts();
-
+        
         if(products.some(product => product.code === code)){
-            console.log("\n ⛔ ¡No se pudo agregar el producto! El código ingresado ya existe \n");
+            throw new Error('No se pudo agregar el producto! El código ingresado ya existe');
             return;
             
-        } else if(!title || !description || !price || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) || !code || !stock || status === undefined || !category) {
-            
-            console.log("\n ⚠️  Todos los campos son obligatorios ¡Intenta agregar nuevamente el producto, asegurate de incluir por lo menos 1 Thumbnail y setear el Status en true o False! \n");
-            throw new Error('Faltan parámetros en la solicitud o son incorrectos.');
+        } else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category) {
+            throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
             
         } else {
             let id = 1;
@@ -78,7 +73,7 @@ class ProductManager {
         if( found ){
             return found
         }else{
-        return " ❌ Product not found "
+        return "Product not found "
         }
     }
 
@@ -94,27 +89,32 @@ class ProductManager {
     }
 
     updateProduct(id, obj){
+        const { title,description,price,thumbnails,code,stock,status,category } = obj;
         let products=this.getProducts()
         let index=products.findIndex(product=>product.id===id)
         if(index===-1){
             throw new Error(`El producto con id ${id} no existe en la base de datos`)
-        } else if(!title || !description || !price || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) || !code || !stock || status === undefined || !category) {
+        } else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category) {
+            throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
             
-            console.log("\n ⚠️ ¡Intenta actualizar nuevamente el producto, asegurate de incluir todas las propiedades, por lo menos 1 Thumbnail y setear el Status en true o False! \n");
-            throw new Error('Faltan parámetros en la solicitud o son incorrectos verifique las propiedades del producto.');
         }
-
+        console.log("antes de construir el nuevo objeto");
         products[index]={
-            ...productos[index],
-            ...obj,
+            ...products[index],
+            title,
+            description,
+            price,
+            thumbnails,
+            code,
+            stock,
+            status,
+            category,
             id
         }
 
         fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
 
     }
-
-
 
 }
 
