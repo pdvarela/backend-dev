@@ -1,6 +1,11 @@
 const express = require('express');
-const productsRouter = express.Router;
+const {Router} = require('express');
+const productsRouter = Router();
+const path = require('path')
+const dirPath = path.join(__dirname, '..','DB','productsFile.json');
 
+const ProductManager = require('../productManager')
+const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
 productsRouter.get('/', (req, res) => {
@@ -92,4 +97,4 @@ productsRouter.post('/', (req, res) => {
  })
 
 
-module.exports = productsRouter;
+module.exports = productsRouter

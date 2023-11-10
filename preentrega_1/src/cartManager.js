@@ -1,6 +1,5 @@
-const { error } = require('console');
 const fs = require('fs');
-const { re } = require('mathjs');
+
 
 class CartManager {
 
@@ -36,8 +35,13 @@ class CartManager {
     };
 
     carts.push(cart);
-
+    try{
+      console.log('El PATH ES:',this.path);
       fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
+    }
+    catch(error){
+        console.log("Error al tratar de escribir el archivo", error);
+    }
     return;
   }
 

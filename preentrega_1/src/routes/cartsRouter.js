@@ -1,13 +1,19 @@
 const express = require('express');
-const CartManager = require('../cartManager');
-const cartsRouter = express.Router;
-
+const {Router} = require('express');
+const cartsRouter = Router()
+const path = require('path')
+const dirPath = path.join(__dirname, '..','DB','cartsFile.json');
+const CartManager = require('../cartManager')
+const cartManager = new CartManager(dirPath)
 //La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura: ✅
 //Id:Number/String (A tu elección, de igual manera como con los productos, debes asegurar que nunca se dupliquen los ids y que este se autogenere).
 //products: Array que contendrá objetos que representen cada producto
 
+
 cartsRouter.post('/', (req, res) => {
-    CartManager.addCart();
+    let newCart = cartManager.addCart();
+    res.json({ newCart });
+
 })
 
 //La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.✅
@@ -44,4 +50,4 @@ cartsRouter.post('/:cid/product/:pid', (req, res) => {
 })
 
 
-module.exports = cartsRouter;
+module.exports = cartsRouter
