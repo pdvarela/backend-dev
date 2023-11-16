@@ -1,44 +1,28 @@
     const express = require('express')
     const path = require('path')
     const fs = require('fs')
-    const expHbrs = require('express-handlebars')
     const { Server } = require("socket.io");
-
+    const exphbs = require('express-handlebars');
     const productsRouter = require('./routes/productsRouter')
     const cartsRouter = require('./routes/cartsRouter')
+    const viewsRouter = require('./routes/viewsRouter')
 
+    const hbarsPath = path.join(__dirname, 'views')
 
     const PORT = 8080
     const app = express()
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.engine('handlebars', expHbrs.engine);
-    app.set('view engine', 'handlebars');
+
+    app.engine('handlebars', exphbs.engine);
+    app.set('view engine', `${hbarsPath}`);
     app.set('views', './src/views');
-   
+    
     app.use('/api/products', productsRouter);
     app.use('/api/carts', cartsRouter);
-
-
-
-    //root
-    app.get('/', (req, res) => {
-        
-        try {
-            const userTest = {
-              name: 'Juan',
-              age: '25',
-            };
-        
-            res.setHeader('Content-type', 'text/html');
-            res.status(200).render('index', { userTest });
-          } 
-          catch (error) {
-            console.error('Error rendering index page:', error);
-            res.status(500).send('An error occurred while rendering the index page');
-          }
-        });
+    app.use('/', viewsRouter);
+    
 
     const serverHttp = app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`)
