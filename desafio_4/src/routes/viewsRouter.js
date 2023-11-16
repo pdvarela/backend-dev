@@ -9,7 +9,8 @@ viewsRouter.get('/', (req, res) => {
           name: 'Juan',
           age: '25',
         };
-        res.status(200).render('index', userTest);
+        console.log(userTest);
+        res.render('index', { userTest });
       } 
       catch (error) {
         console.error('Error al renderizar la pagina Index:', error);

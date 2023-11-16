@@ -7,17 +7,24 @@
     const cartsRouter = require('./routes/cartsRouter')
     const viewsRouter = require('./routes/viewsRouter')
 
-    const hbarsPath = path.join(__dirname, 'views')
 
     const PORT = 8080
     const app = express()
+    const hbs = exphbs.create({
+      extname: '.hbs', // Extensión de los archivos de plantillas
+      defaultLayout: 'main', // Layout predeterminado
+      layoutsDir: path.join(__dirname, 'views/layouts'), // Directorio de layouts
+      partialsDir: path.join(__dirname, 'views/partials'), // Directorio de partials
+  });
+  
+  app.engine('.hbs', hbs.engine);
+  app.set('view engine', '.hbs');
+  app.set('views', path.join(__dirname, 'views'));
+
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.engine('handlebars', exphbs.engine);
-    app.set('view engine', `${hbarsPath}`);
-    app.set('views', './src/views');
     
     app.use('/api/products', productsRouter);
     app.use('/api/carts', cartsRouter);
