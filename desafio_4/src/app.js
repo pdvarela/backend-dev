@@ -20,22 +20,22 @@
   app.engine('.hbs', hbs.engine);
   app.set('view engine', '.hbs');
   app.set('views', path.join(__dirname, 'views'));
+  app.use('/',express.static(path.join(__dirname, '/public')));
 
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-
-    
     app.use('/api/products', productsRouter);
     app.use('/api/carts', cartsRouter);
     app.use('/', viewsRouter);
     
 
-    const serverHttp = app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`)
     })
 
-    const io = new Server({serverHttp});
+    const io = new Server(server);
+
 
     io.on("connection", (socket) => {
       console.log(`Se ha conectado el cliente ${socket.id}`);
