@@ -1,8 +1,8 @@
     const express = require('express')
     const path = require('path')
     const fs = require('fs')
-    const engine = require('express-handlebars')
-
+    const expHbrs = require('express-handlebars')
+    const { Server } = require("socket.io");
 
     const productsRouter = require('./routes/productsRouter')
     const cartsRouter = require('./routes/cartsRouter')
@@ -13,7 +13,7 @@
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.engine('handlebars',engine.engine);
+    app.engine('handlebars', expHbrs.engine);
     app.set('view engine', 'handlebars');
     app.set('views', './src/views');
    
@@ -40,6 +40,12 @@
           }
         });
 
-    const server = app.listen(PORT, () => {
+    const serverHttp = app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`)
     })
+
+    const io = new Server({serverHttp});
+
+    io.on("connection", (socket) => {
+      console.log(`Se ha conectado el cliente ${socket.id}`);
+    });
