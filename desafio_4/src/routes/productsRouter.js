@@ -1,11 +1,9 @@
 const express = require('express');
-const {Router} = require('express');
-const productsRouter = Router();
+const productsRouter = express.Router();
 const path = require('path')
 const dirPath = path.join(__dirname, '..','DB','productsFile.json');
+const ProductManager = require('../productManager');
 const io = require('../app');
-
-const ProductManager = require('../productManager')
 const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
@@ -45,8 +43,9 @@ productsRouter.post('/', (req, res) => {
     
     try {
         productManager.addProduct(newProduct)
-        // io.emit('newProduct', newProduct)
+        io.emit('newProduct', newProduct)
         res.json({ message: 'Producto agregado' });
+        
     }
     catch(error){
         res.status(400).json({ error: error.message });
@@ -84,8 +83,17 @@ productsRouter.post('/', (req, res) => {
     }
 
     try{
-        productManager.deletProduct(id)
-        res.json({ message: 'Producto eliminado' });
+        let deletedProduct = productManager.getProducts(id)
+        try{
+            
+            productManager.deletProduct(id)
+            io.emit('deletedProduct', deletedProduct)
+            res.json({ message: 'Producto eliminado' });
+        }
+        catch(error){
+            res.status(400).json({ error: error.message });
+        }
+
         return;
     }
     catch(error){

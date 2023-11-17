@@ -88,20 +88,5 @@
     "stock": 300,
     "status": true,
     "category": "ciclismo"
-  },
-  {
-    "id": 10,
-    "title": "Sales efervescentes",
-    "description": "Sales hidratantes en pastilla",
-    "price": 3.8,
-    "thumbnails": [
-      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700198958/ll6ywuuhk4texahmo6bx.png",
-      "url2",
-      "url3"
-    ],
-    "code": "7439afd",
-    "stock": 100,
-    "status": true,
-    "category": "ciclismo"
   }
 ]

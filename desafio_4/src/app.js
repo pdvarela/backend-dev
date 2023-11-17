@@ -1,7 +1,7 @@
     const express = require('express')
     const path = require('path')
     const fs = require('fs')
-    const { Server } = require("socket.io");
+    const Server=require('socket.io').Server;
     const exphbs = require('express-handlebars');
     const Handlebars = require('handlebars'); //helper
     const productsRouter = require('./routes/productsRouter')
@@ -52,7 +52,7 @@
         console.log(`Server listening on port ${PORT}`)
     })
 
-    const io = new Server(server);
-//Exporto el sokeckt io para usar en los routers:
+    const io=new Server(server);
+    
 
-module.exports = io;
+

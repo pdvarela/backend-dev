@@ -22,8 +22,22 @@ viewsRouter.get('/', (req, res) => {
     });
 
     viewsRouter.get('/realTimeProducts', (req, res) => {
-
+      try {
+        
+        let products = productManager.getProducts();
+          
+          let title = "LISTA DE PRODUCTOS";
+          let inventoryLenght = products.length;
+          io.emit('products', products)
+          res.status(200).render('realTimeProducts', { products, title, inventoryLenght});
+        } 
+        catch (error) {
+          console.error('Error al renderizar la pagina Index:', error);
+          res.status(500).send('Ocurrio un error al renderizar el index');
+        }
     });
 
     module.exports = viewsRouter;
+
+
 
