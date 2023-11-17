@@ -3,6 +3,7 @@ const {Router} = require('express');
 const productsRouter = Router();
 const path = require('path')
 const dirPath = path.join(__dirname, '..','DB','productsFile.json');
+const io = require('../app');
 
 const ProductManager = require('../productManager')
 const productManager = new ProductManager(dirPath)
@@ -44,6 +45,7 @@ productsRouter.post('/', (req, res) => {
     
     try {
         productManager.addProduct(newProduct)
+        // io.emit('newProduct', newProduct)
         res.json({ message: 'Producto agregado' });
     }
     catch(error){

@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "title": "zapatos",
+    "description": "Zapatos para ciclismo profesional",
+    "price": 119.3,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700184128/nmecbvpnezdaznntaghp.webp",
+      "url2",
+      "url3"
+    ],
+    "code": "pp3499",
+    "stock": 16,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 2,
+    "title": "jersey",
+    "description": "Jersey clismo clase A",
+    "price": 29.3,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700183737/dzfbxtnkrlb33gm1upbg.webp",
+      "url2",
+      "url3"
+    ],
+    "code": "39995asd",
+    "stock": 56,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 3,
+    "title": "jersey corto",
+    "description": "Jersey clase B",
+    "price": 101.75,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700186164/a6vixajslxd0syj4z5pl.webp",
+      "url2",
+      "url3"
+    ],
+    "code": "2435asd",
+    "stock": 60,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 4,
+    "title": "casco mtb",
+    "description": "Casco de ciclismo Mips mtb",
+    "price": 303.5,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700187098/bgcbcl7kzbyqikdc0byb.jpg",
+      "url2",
+      "url3"
+    ],
+    "code": "2445asd",
+    "stock": 80,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 5,
+    "title": "Bicicleta Scott Scale 920",
+    "description": "Scott Scale 920 Talla M",
+    "price": 2500,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700194358/l9lkckdrascsgpebjm6f.png",
+      "url2",
+      "url3"
+    ],
+    "code": "5435asu",
+    "stock": 12,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 6,
+    "title": "Gel Energetico",
+    "description": "Gel Energetico con Cafeina",
+    "price": 3.5,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700198958/ll6ywuuhk4texahmo6bx.png",
+      "url2",
+      "url3"
+    ],
+    "code": "3475ahd",
+    "stock": 300,
+    "status": true,
+    "category": "ciclismo"
+  },
+  {
+    "id": 10,
+    "title": "Sales efervescentes",
+    "description": "Sales hidratantes en pastilla",
+    "price": 3.8,
+    "thumbnails": [
+      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700198958/ll6ywuuhk4texahmo6bx.png",
+      "url2",
+      "url3"
+    ],
+    "code": "7439afd",
+    "stock": 100,
+    "status": true,
+    "category": "ciclismo"
+  }
+]

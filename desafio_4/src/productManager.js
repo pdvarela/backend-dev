@@ -98,7 +98,7 @@ class ProductManager {
             throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
             
         }
-        console.log("antes de construir el nuevo objeto");
+        
         products[index]={
             ...products[index],
             title,

@@ -39,7 +39,7 @@ class CartManager {
 
     carts.push(cart);
     try{
-      console.log('El PATH ES:',this.path);
+      
       fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
     }
     catch(error){

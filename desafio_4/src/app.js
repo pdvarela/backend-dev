@@ -3,11 +3,12 @@
     const fs = require('fs')
     const { Server } = require("socket.io");
     const exphbs = require('express-handlebars');
+    const Handlebars = require('handlebars'); //helper
     const productsRouter = require('./routes/productsRouter')
     const cartsRouter = require('./routes/cartsRouter')
-    const viewsRouter = require('./routes/viewsRouter')
+    const viewsRouter = require('./routes/viewsRouter');
 
-
+    
     const PORT = 8080
     const app = express()
     const hbs = exphbs.create({
@@ -15,6 +16,23 @@
       defaultLayout: 'main', // Layout predeterminado
       layoutsDir: path.join(__dirname, 'views/layouts'), // Directorio de layouts
       partialsDir: path.join(__dirname, 'views/partials'), // Directorio de partials
+      
+      
+      //Helpers: ToUpperCase para texto en mayuscula en vistas de handlebars. firstThumbnail para pasar a la vista la primera imagen de producto 
+      helpers: {
+        toUpperCase: function(str) {
+          return str.toUpperCase();
+        },
+        firstThumbnail: function(thumbnails) {
+          if (Array.isArray(thumbnails) && thumbnails.length > 0) {
+            return thumbnails[0];
+          } else {
+            return "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700198958/ll6ywuuhk4texahmo6bx.png";
+          
+          }
+
+        }
+      }
   });
   
   app.engine('.hbs', hbs.engine);
@@ -35,8 +53,6 @@
     })
 
     const io = new Server(server);
+//Exporto el sokeckt io para usar en los routers:
 
-
-    io.on("connection", (socket) => {
-      console.log(`Se ha conectado el cliente ${socket.id}`);
-    });
+module.exports = io;
