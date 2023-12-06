@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import __dirname from './utils.js';
 const productsPath = path.join(__dirname, '.','DB','productsFile.json')
 
 
-class CartManager {
+export class CartManager {
 
   constructor (filePath){
     this.path = filePath;
@@ -115,4 +116,3 @@ class CartManager {
 
 }
 
-module.exports = CartManager;

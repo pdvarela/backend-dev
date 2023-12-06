@@ -1,16 +1,20 @@
-const fs = require('fs');
+import fs from 'fs';
+import path from 'path';
 
-class ProductManager {
+export class ProductManager {
 
     constructor (filePath){
-        this.path = filePath
+        this.path = filePath;
     }
 
     
     getProducts() {
     // debe devolver el arreglo con todos los productos creados hasta ese momento✅
-
+        
+        let existe = fs.existsSync(this.path);
+        
         if(fs.existsSync(this.path)){
+            
             return JSON.parse(fs.readFileSync(this.path, "utf8"));
         } else {
             return [];
@@ -77,6 +81,19 @@ class ProductManager {
         }
     }
 
+    getProductByCode(code) {
+
+            let dataFromFile = this.getProducts()
+            
+            const found = dataFromFile.find((product) => product.code === code);
+    
+            if( found ){
+                return found
+            }else{
+            return "Product not found "
+            }
+        }
+
     deletProduct(id){
         let products=this.getProducts()
         let index=products.findIndex(product=>product.id===id)
@@ -117,5 +134,3 @@ class ProductManager {
     }
 
 }
-
-module.exports = ProductManager;

@@ -1,9 +1,11 @@
-const express = require('express');
-const productsRouter = express.Router();
-const path = require('path')
-const dirPath = path.join(__dirname, '..','DB','productsFile.json');
-const ProductManager = require('../productManager');
-const io = require('../app');
+import { Router } from 'express';
+export const productsRouter = Router();
+import path from 'path';
+import __dirname from '../utils.js';
+const dirPath = path.join(__dirname,'DB','productsFile.json');
+import { ProductManager } from '../productManager.js';
+import { io } from '../app.js';
+
 const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
@@ -38,14 +40,15 @@ productsRouter.get('/', (req, res) => {
 // La ruta raíz POST / deberá agregar un nuevo producto✅
 productsRouter.post('/', (req, res) => {
     let newProduct = req.body
-
     //Llamamos al la funcion addProduct de productManager pasandole el newProduct usando try catch para capturar errores en caso de que no se hayan enviado todos los campos del producto (Lo validad productManager.addProduct)
     
     try {
         productManager.addProduct(newProduct)
-        io.emit('newProduct', newProduct)
+        // Consigo el producto que acabo de agregar y lo envio a todos los clientes con el evento newProduct con esto mando el producto con el ID correcto y no el que manden por body. ✅
+        let lastProduct = productManager.getProductByCode(newProduct.code)
+        io.emit('newProduct', lastProduct)
         res.json({ message: 'Producto agregado' });
-        
+
     }
     catch(error){
         res.status(400).json({ error: error.message });
@@ -83,7 +86,7 @@ productsRouter.post('/', (req, res) => {
     }
 
     try{
-        let deletedProduct = productManager.getProducts(id)
+        let deletedProduct = productManager.getProductById(id)
         try{
             
             productManager.deletProduct(id)
@@ -102,6 +105,3 @@ productsRouter.post('/', (req, res) => {
     }
 
  })
-
-
-module.exports = productsRouter

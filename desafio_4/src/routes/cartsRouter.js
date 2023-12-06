@@ -1,9 +1,9 @@
-const express = require('express');
-const {Router} = require('express');
-const cartsRouter = Router()
-const path = require('path')
-const dirPath = path.join(__dirname, '..','DB','cartsFile.json');
-const CartManager = require('../cartManager')
+import { Router } from "express";
+export const cartsRouter = Router()
+import path from 'path'
+import __dirname from "../utils.js";
+const dirPath = path.join(__dirname,'DB','cartsFile.json');
+import { CartManager } from "../cartManager.js";
 const cartManager = new CartManager(dirPath)
 
 //La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura: ✅
@@ -63,6 +63,3 @@ cartsRouter.post('/:cid/product/:pid', (req, res) => {
     }
 
 })
-
-
-module.exports = cartsRouter

@@ -1,12 +1,13 @@
-    const express = require('express')
-    const path = require('path')
-    const fs = require('fs')
-    const Server=require('socket.io').Server;
-    const exphbs = require('express-handlebars');
-    const Handlebars = require('handlebars'); //helper
-    const productsRouter = require('./routes/productsRouter')
-    const cartsRouter = require('./routes/cartsRouter')
-    const viewsRouter = require('./routes/viewsRouter');
+    import express  from 'express';
+    import path from 'path';
+    import __dirname from './utils.js';
+    import { Server } from 'socket.io';
+    import exphbs from 'express-handlebars';
+    import {productsRouter} from './routes/productsRouter.js';
+    import {cartsRouter} from './routes/cartsRouter.js';
+    import {viewsRouter} from './routes/viewsRouter.js';
+    import fs from 'fs';
+    import Toastify from 'toastify-js'
 
     
     const PORT = 8080
@@ -33,12 +34,12 @@
 
         }
       }
-  });
+    });
   
-  app.engine('.hbs', hbs.engine);
-  app.set('view engine', '.hbs');
-  app.set('views', path.join(__dirname, 'views'));
-  app.use('/',express.static(path.join(__dirname, '/public')));
+    app.engine('.hbs', hbs.engine);
+    app.set('view engine', '.hbs');
+    app.set('views', path.join(__dirname, 'views'));
+    app.use('/',express.static(path.join(__dirname, '/public')));
 
 
     app.use(express.json());
@@ -47,12 +48,12 @@
     app.use('/api/carts', cartsRouter);
     app.use('/', viewsRouter);
     
-
     const server = app.listen(PORT, () => {
-        console.log(`Server listening on port ${PORT}`)
-    })
+      console.log(`Server listening on port ${PORT}`);
+    });
 
-    const io=new Server(server);
+    export const io = new Server(server);
     
-
-
+    io.on("connection",socket=>{
+      console.log(`Se ha conectado un cliente con id ${socket.id}`)
+    })

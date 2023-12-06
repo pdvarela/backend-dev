@@ -1,20 +1,5 @@
 [
   {
-    "id": 1,
-    "title": "zapatos",
-    "description": "Zapatos para ciclismo profesional",
-    "price": 119.3,
-    "thumbnails": [
-      "https://res.cloudinary.com/dm95tqeqt/image/upload/v1700184128/nmecbvpnezdaznntaghp.webp",
-      "url2",
-      "url3"
-    ],
-    "code": "pp3499",
-    "stock": 16,
-    "status": true,
-    "category": "ciclismo"
-  },
-  {
     "id": 2,
     "title": "jersey",
     "description": "Jersey clismo clase A",
