@@ -3,9 +3,13 @@ export const productsRouter = Router();
 import path from 'path';
 import __dirname from '../utils.js';
 const dirPath = path.join(__dirname,'DB','productsFile.json');
-import { ProductManager } from '../productManager.js';
+import { ProductManager } from '../dao/managers/productManager.js';
 import { io } from '../app.js';
+import mongoose from 'mongoose';
 
+//----------------MongoDB
+
+//----------------Fylesystem
 const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅

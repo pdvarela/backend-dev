@@ -3,7 +3,7 @@ export const cartsRouter = Router()
 import path from 'path'
 import __dirname from "../utils.js";
 const dirPath = path.join(__dirname,'DB','cartsFile.json');
-import { CartManager } from "../cartManager.js";
+import { CartManager } from "../dao/managers/cartManager.js";
 const cartManager = new CartManager(dirPath)
 
 //La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura: ✅

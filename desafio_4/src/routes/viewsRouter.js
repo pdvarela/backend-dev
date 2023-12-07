@@ -1,6 +1,6 @@
 import { Router } from 'express';
 export const viewsRouter = Router()
-import { ProductManager } from '../productManager.js';
+import { ProductManager } from '../dao/managers/productManager.js';
 import path from 'path';
 import __dirname from '../utils.js';
 import { io } from '../app.js';

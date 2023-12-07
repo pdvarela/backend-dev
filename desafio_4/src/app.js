@@ -1,4 +1,5 @@
     import express  from 'express';
+    import mongoose, { mongo } from 'mongoose';
     import path from 'path';
     import __dirname from './utils.js';
     import { Server } from 'socket.io';
@@ -57,3 +58,10 @@
     io.on("connection",socket=>{
       console.log(`Se ha conectado un cliente con id ${socket.id}`)
     })
+
+    try {
+        await mongoose.connect('mongodb+srv://petervarela08:AYWGG6tniiXyjTRz@cluster0.q7hvoke.mongodb.net/?retryWrites=true&w=majority',{dbName: 'ecommerce'})
+        console.log('DB ONLINE!');
+    } catch (error) {
+      console.log('Ha ocurrido un error al conectarse a la DB:', error.message);      
+    }
