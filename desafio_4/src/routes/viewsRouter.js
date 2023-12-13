@@ -1,6 +1,6 @@
 import { Router } from 'express';
 export const viewsRouter = Router()
-import { ProductManager } from '../dao/managers/productManager.js';
+import { ProductManager } from '../dao/managers/productManagerMongoDB.js';
 import path from 'path';
 import __dirname from '../utils.js';
 import { io } from '../app.js';
@@ -8,11 +8,11 @@ const dirPath = path.join(__dirname,'DB','productsFile.json');
 const productManager = new ProductManager(dirPath)
 
 
-viewsRouter.get('/', (req, res) => {
+viewsRouter.get('/', async(req, res) => {
    
   try {
       
-    let products = productManager.getProducts();
+    let products = await productManager.getProducts();
       
       let title = "LISTA DE PRODUCTOS";
       let inventoryLenght = products.length;
@@ -24,10 +24,10 @@ viewsRouter.get('/', (req, res) => {
     }
   });
 
-viewsRouter.get('/realTimeProducts', (req, res) => {
+viewsRouter.get('/realTimeProducts', async(req, res) => {
   try {
         
-    let products = productManager.getProducts();
+    let products = await productManager.getProducts();
       
       let title = "LISTA DE PRODUCTOS";
       let inventoryLenght = products.length;
@@ -41,14 +41,14 @@ viewsRouter.get('/realTimeProducts', (req, res) => {
 
 //Agrego post y delete en caso que se requiera usar estos endpoints desde viewsRouter directamente
 
-viewsRouter.post('/', (req, res) => {
+viewsRouter.post('/', async(req, res) => {
   let newProduct = req.body
   //Llamamos al la funcion addProduct de productManager pasandole el newProduct usando try catch para capturar errores en caso de que no se hayan enviado todos los campos del producto (Lo validad productManager.addProduct)
   
   try {
-      productManager.addProduct(newProduct)
+      await productManager.addProduct(newProduct)
       // Consigo el producto que acabo de agregar y lo envio a todos los clientes con el evento newProduct con esto mando el producto con el ID correcto y no el que manden por body. ✅
-      let lastProduct = productManager.getProductByCode(newProduct.code)
+      let lastProduct =await productManager.getProductByCode(newProduct.code)
       io.emit('newProduct', lastProduct)
       res.json({ message: 'Producto agregado' });
 
@@ -59,7 +59,7 @@ viewsRouter.post('/', (req, res) => {
 
 })
 
-viewsRouter.delete('/:pid', (req, res) => {
+viewsRouter.delete('/:pid', async(req, res) => {
   let id = parseInt(req.params.pid)
   if(isNaN(id)){
       res.status(400).json({ error: 'Ingresa un ID numérico' });
@@ -67,10 +67,10 @@ viewsRouter.delete('/:pid', (req, res) => {
   }
 
   try{
-      let deletedProduct = productManager.getProductById(id)
+      let deletedProduct = await productManager.getProductById(id)
       try{
           
-          productManager.deletProduct(id)
+          await productManager.deletProduct(id)
           io.emit('deletedProduct', deletedProduct)
           res.json({ message: 'Producto eliminado' });
       }

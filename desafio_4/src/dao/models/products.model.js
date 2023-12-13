@@ -11,7 +11,7 @@ const productsSchema= new mongoose.Schema(
         status:{type:Boolean, required:true},
         stock:{type:Number, required:true},
         category:{type:String, required:true},
-        thumbnail:{type:[String], required:true},
+        thumbnails:{type:[String], required:true},
         deleted:{type:Boolean, default:false}
     },
     {

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { products } from '../models/products.model.js'
+import { productsModel as products } from '../models/products.model.js'
 import { error } from 'console';
 
 
@@ -13,9 +13,8 @@ export class ProductManager {
     
     async getProducts() {
     // debe devolver el arreglo con todos los productos creados hasta ese momento✅
-        
         try {
-            const productsList = await products.find({});
+            const productsList = await products.find({}).lean();
             return productsList;
         } catch (error) {
             console.log('Error al obtener los productos de la BD', error);
@@ -26,11 +25,11 @@ export class ProductManager {
     async addProduct(productObjet) {
 
         const { title, description, price, thumbnails, code, stock, status, category } = productObjet;
-
+        const filter = { code: code };
         try {
-            const existingProduct = await products.findOne({ code });
+            const existingProduct = await products.findOne(filter);
 
-            if (existingProduct) {
+            if (existingProduct!==null) {
             throw new Error('No se pudo agregar el producto. ¡El código ingresado ya existe!');
             }
 
@@ -58,11 +57,11 @@ export class ProductManager {
             category,
             });
 
-            console.log('PRoducto agregado correctamente a la BD');
+            let res = `Producto agregado correctamente a la BD`
+            return res;
         } catch (error) {
-            throw new Error('Error al agregar el producto'); error;
+            throw new Error(error.message);
         }
-
     }
 
 
@@ -70,30 +69,32 @@ export class ProductManager {
     // Debe buscar en el arreglo el producto que coincida con el id ✅
     // En caso de no coincidir ningún id, mostrar en consola un error “Not found”✅
     // La busqueda la realiza desde MongoDB (Desafio4) ✅
+        const filter = {id: id}
         try {
-            const existingProduct = await products.findOne({ id });
+            const existingProduct = await products.findOne(filter);
     
-            if( existingProduct ){
+            if( existingProduct !== null ){
                 return existingProduct
             }else{
                 throw new Error(`El producto con id ${id} no existe en la base de datos`)
             }
         } catch (error) {
-            throw new Error(`Error al buscar al producto ${id} en DB`,error);            
+            throw new Error(error.message);            
         } 
     }
             
-   async getProductByCode(code) {
+    async getProductByCode(code) {
+    const filter = {code: code}
         try {
-            const existingProduct = await products.findOne({ code });
+            const existingProduct = await products.findOne(filter);
 
-            if( existingProduct ){
+            if( existingProduct !== null){
                 return existingProduct
             }else{
-                throw new Error(`El producto con id ${code} no existe en la base de datos`)
+                throw new Error(`El producto con codigo ${code} no existe en la base de datos`)
             }
         } catch (error) {
-            throw new Error(`Error al buscar al producto ${code} en DB`,error);
+            throw new Error(error.message);
         }
     }
 
@@ -101,43 +102,41 @@ export class ProductManager {
         //ecuentro el producto a eliminar en la base de datos y lo elimino ✅
         try {
             const filter = {id: id}
-            const productoToDelet = await products.findOne({filter});
-            if(!productoToDelet){
+            const productToDelet = await products.findOne(filter);
+            if(productToDelet===null){
                 throw new Error(`El producto con id ${id} no existe en la base de datos`)
             }
-            await products.deleteOne({ id })
-            let result = result.count === 1
+            let result = await products.deleteOne(filter)
+            result = result.deletedCount === 1
             ? `Producto con id ${id} eliminado correctamente`
             : `Error al eliminar el producto con id ${id}`
             return result;
 
         } catch (error) {
-            throw new Error(`Error al eliminar el producto con id ${id}`,error);                
+            throw new Error(error.message);                
         }
     }
 
-   async updateProduct(id, obj){
+    async updateProduct(id, obj){
         const { title,description,price,thumbnails,code,stock,status,category } = obj;
         const filter = {id: id}
 
         try {
-            const productoToDelet = await products.findOne({filter});
+            const productoToDelet = await products.findOne(filter);
             if(!productoToDelet) {
                 throw new Error(`El producto con id ${id} no existe en la base de datos`)
-            }else{
-
+            }else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category){
+                throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
+            } else{                
                 let result = await products.updateOne(filter, { $set: obj })
                 result = result.modifiedCount === 1
                 ? `Producto con ID ${id} fue actualizado correctamente`
                 : `Error, no se pudo realizar la actualización del producto con ID ${id}`
                 return result;
             }
-            
         } catch (error) {
             throw new Error(`Error al actualizar el producto con ID ${id}`,error);
         }
-
-
         // if(index===-1){
         //     throw new Error(`El producto con id ${id} no existe en la base de datos`)
         // } else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category) {

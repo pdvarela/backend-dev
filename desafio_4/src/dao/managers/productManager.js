@@ -115,7 +115,6 @@ export class ProductManager {
             throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
             
         }
-        
         products[index]={
             ...products[index],
             title,
@@ -128,9 +127,6 @@ export class ProductManager {
             category,
             id
         }
-
         fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
-
     }
-
 }
