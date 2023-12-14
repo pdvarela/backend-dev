@@ -35,10 +35,11 @@ export class ProductManager {
             const options = {
                 limit: parseInt(limit),
                 page: parseInt(page),
-                sort: sort
+                sort: sort,
+                lean: true,
             };
 
-            const productsList = await products.paginate(filter, options).lean();
+            const productsList = await products.paginate(filter, options);
             return productsList;
         } catch (error) {
             console.log('Error al obtener los productos de la BD', error);

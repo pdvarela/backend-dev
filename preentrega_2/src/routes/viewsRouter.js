@@ -11,17 +11,24 @@ const productManager = new ProductManager(dirPath)
 viewsRouter.get('/', async(req, res) => {
    
   try {
-      
-    let products = await productManager.getProducts();
-      
-      let title = "LISTA DE PRODUCTOS";
-      let inventoryLenght = products.length;
-      res.status(200).render('index', { products, title, inventoryLenght});
-    } 
-    catch (error) {
-      console.error('Error al renderizar la pagina Index:', error);
-      res.status(500).send('Ocurrio un error al renderizar el index');
+    const { limit = 10, page = 1, sortByPrice, category, availability } = req.query || {};
+    const parsedLimit = parseInt(limit);
+    const parsedPage = parseInt(page);
+
+    if (isNaN(parsedLimit) || isNaN(parsedPage)) {
+        return res.status(400).json({ message: 'Los valores de limit y page deben ser números válidos.' });
     }
+
+    const products = await productManager.getProducts({ limit: parsedLimit, page: parsedPage, sortByPrice, category, availability });
+
+    const title = "LISTA DE PRODUCTOS";
+    const inventoryLength = products.totalDocs; // Cambiar a la propiedad correcta de total de documentos
+
+    res.status(200).render('index', { products: products.docs, title, inventoryLength });
+} catch (error) {
+    console.error('Error al renderizar la página Index:', error);
+    res.status(500).send('Ocurrió un error al renderizar el index');
+}
   });
 
 viewsRouter.get('/realTimeProducts', async(req, res) => {

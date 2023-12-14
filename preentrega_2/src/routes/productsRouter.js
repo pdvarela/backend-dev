@@ -14,8 +14,9 @@ const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
 productsRouter.get('/', async (req, res) => {
+    console.log('----------Entro al endpoint');
     try {
-        const { limit = 10, page = 1, sortByPrice, category, availability } = req.query;
+        const { limit = 10, page = 1, sortByPrice, category, availability } = req.query || {};
         const parsedLimit = parseInt(limit);
         const parsedPage = parseInt(page);
 
@@ -23,6 +24,11 @@ productsRouter.get('/', async (req, res) => {
             return res.status(400).json({ message: 'Los valores de limit y page deben ser números válidos.' });
         }
 
+        // Verificar si no se proporcionan filtros ni consultas, devolver todos los productos
+        if (Object.keys(req.query).length === 0) {
+            const products = await productManager.getProducts({});
+            return res.json(products);
+        }
 
         const products = await productManager.getProducts({ limit: parsedLimit, page: parsedPage, sortByPrice, category, availability });
         res.json(products);
