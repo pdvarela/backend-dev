@@ -30,6 +30,7 @@ viewsRouter.get('/', async(req, res) => {
     res.status(500).send('Ocurrió un error al renderizar el index');
 }
   });
+  
 
 viewsRouter.get('/realTimeProducts', async(req, res) => {
   try {

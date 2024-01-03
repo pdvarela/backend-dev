@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { productsModel as products } from '../models/products.model.js'
 import { error } from 'console';
-
+import mongoose  from 'mongoose';
 
 export class ProductManager {
 
@@ -11,23 +11,24 @@ export class ProductManager {
     }
 
     
-    async getProducts({ limit, page, sortByPrice, category, availability }) {
+    async getProducts({ limit, page, sortByPrice, category}) {
         try {
             const filter = {};
-
+            
             // Filtrar por categoría si se especifica
             if (category) {
-                filter.category = category;
+                filter.category = category;  
             }
 
             // Filtrar por disponibilidad si se especifica
-            if (availability) {
-                filter.status = availability === 'available' ? true : false;
-            }
-
-            const sort = {};
+            // if (availability) {
+            //     filter.status = availability === 'available' ? true : false;
+            // }
 
             // Ordenar por precio si se especifica 
+
+            const sort = {}
+            
             if (sortByPrice) {
                 sort.price = sortByPrice === 'asc' ? 1 : -1;
             }
@@ -38,8 +39,20 @@ export class ProductManager {
                 sort: sort,
                 lean: true,
             };
+            for (const key in filter) {
+             if (filter.hasOwnProperty(key)) {
+                    console.log(`Filter: ${key}: ${filter[key]}`);
+                 }
+            }
+            for (const key in options) {
+                if (options.hasOwnProperty(key)) {
+                       console.log(`Options: ${key}: ${options[key]}`);
+                    }
+               }
 
             const productsList = await products.paginate(filter, options);
+            
+
             return productsList;
         } catch (error) {
             console.log('Error al obtener los productos de la BD', error);
@@ -66,12 +79,11 @@ export class ProductManager {
             }
 
             // Obtener el último ID para generar el nuevo ID del producto
-            const lastProduct = await products.findOne().sort({ id: -1 });
-            const id = lastProduct ? lastProduct.id + 1 : 1;
+            // const lastProduct = await products.findOne().sort({ id: -1 });
+            // const id = lastProduct ? lastProduct.id + 1 : 1;
 
             // Crear un nuevo documento con el modelo products
             const newProduct = await products.create({
-            id,
             title,
             description,
             price,
@@ -94,7 +106,7 @@ export class ProductManager {
     // Debe buscar en el arreglo el producto que coincida con el id ✅
     // En caso de no coincidir ningún id, mostrar en consola un error “Not found”✅
     // La busqueda la realiza desde MongoDB (Desafio4) ✅
-        const filter = {id: id}
+        const filter = {_id: id}
         try {
             const existingProduct = await products.findOne(filter);
     
@@ -126,7 +138,7 @@ export class ProductManager {
     async deletProduct(id){
         //ecuentro el producto a eliminar en la base de datos y lo elimino ✅
         try {
-            const filter = {id: id}
+            const filter = { _id: id }
             const productToDelet = await products.findOne(filter);
             if(productToDelet===null){
                 throw new Error(`El producto con id ${id} no existe en la base de datos`)
@@ -144,11 +156,11 @@ export class ProductManager {
 
     async updateProduct(id, obj){
         const { title,description,price,thumbnails,code,stock,status,category } = obj;
-        const filter = {id: id}
+        const filter = {_id: id}
 
         try {
-            const productoToDelet = await products.findOne(filter);
-            if(!productoToDelet) {
+            const productoToUpdate = await products.findOne(filter);
+            if(!productoToUpdate) {
                 throw new Error(`El producto con id ${id} no existe en la base de datos`)
             }else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category){
                 throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
@@ -162,11 +174,5 @@ export class ProductManager {
         } catch (error) {
             throw new Error(`Error al actualizar el producto con ID ${id}`,error);
         }
-        // if(index===-1){
-        //     throw new Error(`El producto con id ${id} no existe en la base de datos`)
-        // } else if(!title || !description || typeof price !== 'number' || isNaN(price) || (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string')) || !code || typeof stock !== 'number' || isNaN(stock) || typeof status !== 'boolean' || !category) {
-        //     throw new Error('Faltan parámetros en la solicitud o son incorrectos. Verifique los tipos de datos: title:String / description:String / code:String / price:Number / status:Boolean / stock:Number / category:String / thumbnails:Array de minimo 1 Strings');
-            
-        // }
     }
 }

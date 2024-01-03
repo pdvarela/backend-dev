@@ -17,7 +17,7 @@ socket.on("newProduct", datos =>{
                     <div class="flex flex-wrap">
                         <h4 class="text-lg font-semibold mb-1 mr-2">${product.title.toUpperCase()}</h4>
                         <div class="flex mb-1">
-                            <p class="text-gray-600 mr-1"><span class="bg-slate-200 text-black font-light text-xs px-2 py-0.5 rounded-md transform hover:bg-black hover:text-white hover:text-sm"><span class="font-bold">ID:</span> ${product.id}</span></p>
+                            <p class="text-gray-600 mr-1"><span class="bg-slate-200 text-black font-light text-xs px-2 py-0.5 rounded-md transform hover:bg-black hover:text-white hover:text-sm"><span class="font-bold">ID:</span> ${product._id}</span></p>
                             <p class="text-gray-600"><span class="bg-slate-200 text-black font-light text-xs px-2 py-0.5 rounded-md transform hover:bg-black hover:text-white hover:text-sm"><span class="font-bold">Código:</span> ${product.code}</span></p>
                         </div>
                     </div>

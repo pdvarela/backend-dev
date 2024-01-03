@@ -9,16 +9,26 @@ const cartManager = new CartManager(dirPath)
 //La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura: ✅
 //Id:Number/String (A tu elección, de igual manera como con los productos, debes asegurar que nunca se dupliquen los ids y que este se autogenere).
 //products: Array que contendrá objetos que representen cada producto
-cartsRouter.post('/', (req, res) => {
-    cartManager.addCart();
-    let CartsList = cartManager.getCarts();
-    let newCart = CartsList[CartsList.length - 1] 
-    res.json({newCart});
+cartsRouter.post('/', async(req, res) => {
+    let {products} = req.body;
+    try {
+        if(!products){
+            products = [];
+            let result = await cartManager.addCart(products);
+            res.status(200).json({payload: result});
+        }
+    
+        let result = await cartManager.addCart(products);
+        res.json({result});
+        
+    } catch (error) {
+        throw new Error("Error al tratar de agregar el carrito a la DB", error);
+    }
 
 })
 
 //La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.✅
-cartsRouter.get('/:cid', (req, res) => {
+cartsRouter.get('/:cid', async(req, res) => {
     let cid = parseInt(req.params.cid);
     
     if (isNaN(cid)) {
@@ -44,17 +54,26 @@ cartsRouter.get('/:cid', (req, res) => {
 //Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto. 
 // Adicional no se agrega el producto y se responde error si no existe el producto o el archivo de productos✅
 
-cartsRouter.post('/:cid/product/:pid', (req, res) => {
+cartsRouter.post('/:cid/product/:pid', async(req, res) => {
     let cid = parseInt(req.params.cid);
     let pid = parseInt(req.params.pid);
-
+    //veryfico req.body para ver si mandaron la cantidad de producto a actualizar
+    let {quantity} = req.body;
+    
     if (isNaN(cid) || isNaN(pid)) {
         res.status(400).json({ error: 'El id debe ser un número' });
         return;
     }
+    if(isNaN(quantity) || quantity < 1){
+        res.status(400).json({ error: 'La cantidad debe ser un número mayor o igual a 1' });
+    }
+    if(!quantity || quantity === null || quantity ===undefined ){
+        quantity = 1;
+    }
+
     try{
-        cartManager.addProductToCartByCartId(cid, pid);
-        res.json({ message: 'Producto agregado' });
+        cartManager.addProductToCartByCartId(cid, pid, quantity);
+        res.json({ message: `${quantity} Producto: ${pid}  agregado con exito` });
     }
     catch(error){
         res.status(400).json({ error: error.message });
