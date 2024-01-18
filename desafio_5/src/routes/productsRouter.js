@@ -13,19 +13,13 @@ const productManager = new ProductManager(dirPath)
 
 //Query limit: Muestra la cantidad de producto limitada por el parametro ✅
 productsRouter.get('/', async (req, res) => {
-    console.log('----------Entro al endpoint');
+    
     try {
-        console.log('----------Entro TRY');
+        
         const { limit = 10, page = 1, sortByPrice, query} = req.query || {};
         const parsedLimit = parseInt(limit);
         const parsedPage = parseInt(page);
         const category = query;
-
-         for (const key in req.query) {
-             if (req.query.hasOwnProperty(key)) {
-                 console.log(`${key}: ${req.query[key]} ----`);
-             }
-         }
 
         if (isNaN(parsedLimit) || isNaN(parsedPage)) {
             return res.status(400).json({ message: 'Los valores de limit y page deben ser números válidos.' });
@@ -56,7 +50,7 @@ productsRouter.get('/', async (req, res) => {
         //Renderizar en HB
          const title = "LISTA DE PRODUCTOS";
          const inventoryLength = products.totalDocs; // Cambiar a la propiedad correcta de total de documentos
-         console.log(`@@@@@ INVENTORY: ${inventoryLength}`);
+         
          res.status(200).render('index', { products: products.docs, title, inventoryLength});
          
     } catch (error) {

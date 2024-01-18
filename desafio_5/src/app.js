@@ -8,6 +8,7 @@
     import {cartsRouter} from './routes/cartsRouter.js';
     import {viewsRouter} from './routes/viewsRouter.js';
     import session from 'express-session';
+    import MongoStore from 'connect-mongo';
     import fs from 'fs';
     import Toastify from 'toastify-js'
 
@@ -43,9 +44,14 @@
     app.set('views', path.join(__dirname, 'views'));
     app.use('/',express.static(path.join(__dirname, '/public')));
     app.use(session({
-      secret: 'coderCoder123',
-      resave: true,
-      saveUninitialized: true,
+      store: MongoStore.create(
+        {
+          mongoUrl: 'mongodb+srv://petervarela08:AYWGG6tniiXyjTRz@cluster0.q7hvoke.mongodb.net/?retryWrites=true&w=majority',
+          mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true , dbName: 'ecommerce', ttl:60 },
+        }),
+        secret: 'coderCoder123',
+        resave: true,
+        saveUninitialized: true,
     }))
 
 

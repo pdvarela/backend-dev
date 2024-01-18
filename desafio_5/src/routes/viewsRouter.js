@@ -9,6 +9,8 @@ const productManager = new ProductManager(dirPath)
 
 
 viewsRouter.get('/', async(req, res) => {
+
+  console.log(req.session);
    
   try {
     const { limit = 10, page = 1, sortByPrice, category, availability } = req.query || {};

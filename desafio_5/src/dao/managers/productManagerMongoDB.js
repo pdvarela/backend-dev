@@ -39,20 +39,9 @@ export class ProductManager {
                 sort: sort,
                 lean: true,
             };
-            for (const key in filter) {
-             if (filter.hasOwnProperty(key)) {
-                    console.log(`Filter: ${key}: ${filter[key]}`);
-                 }
-            }
-            for (const key in options) {
-                if (options.hasOwnProperty(key)) {
-                       console.log(`Options: ${key}: ${options[key]}`);
-                    }
-               }
-
+            
             const productsList = await products.paginate(filter, options);
             
-
             return productsList;
         } catch (error) {
             console.log('Error al obtener los productos de la BD', error);
